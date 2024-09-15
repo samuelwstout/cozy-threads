@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1726369104805,
+      "tag": "0000_keen_king_cobra",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1726369299220,
+      "tag": "0001_groovy_skrulls",
+      "breakpoints": true
+    }
+  ]
+}
