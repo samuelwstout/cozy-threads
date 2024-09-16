@@ -2,7 +2,7 @@
 
 import Header from "../_components/header";
 import { PhotoIcon } from "@heroicons/react/24/solid";
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent } from "react";
 
 export default function AddProduct() {
   const [title, setTitle] = useState("");

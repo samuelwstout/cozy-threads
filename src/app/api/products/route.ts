@@ -3,8 +3,27 @@ import { put } from "@vercel/blob";
 import { db } from "@/db";
 import { productsTable } from "@/db/schema";
 
+export interface Product {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  createdAt: string;
+  updateAt: Date | null;
+}
+
 export async function GET() {
-  return NextResponse.json({ message: "GET request to products route" });
+  try {
+    const products: Product[] = await db.select().from(productsTable);
+    return NextResponse.json(products);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch products" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request: Request) {
