@@ -1,13 +1,57 @@
+"use client";
+
 import Header from "../_components/header";
 import { PhotoIcon } from "@heroicons/react/24/solid";
+import { useState, FormEvent, useEffect } from "react";
 
 export default function AddProduct() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!file) {
+      alert("Please select an image file");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("image", file);
+
+    try {
+      const response = await fetch("/api/products", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Product added successfully");
+        // Reset form
+        setTitle("");
+        setDescription("");
+        setPrice("");
+        setFile(null);
+      } else {
+        alert("Failed to add product");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while adding the product");
+    }
+  };
+
   return (
     <div>
       <Header />
       <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="mt-6 gap-x-6 gap-y-10 xl:gap-x-8">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="space-y-12">
               <div className="border-b border-gray-900/10 pb-12">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -23,14 +67,15 @@ export default function AddProduct() {
                       Title
                     </label>
                     <div className="mt-2">
-                      <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                        <input
-                          id="title"
-                          name="title"
-                          type="text"
-                          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                        />
-                      </div>
+                      <input
+                        type="text"
+                        name="title"
+                        id="title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        required
+                      />
                     </div>
                   </div>
 
@@ -46,8 +91,10 @@ export default function AddProduct() {
                         id="description"
                         name="description"
                         rows={3}
-                        className="block pl-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        defaultValue={""}
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        required
                       />
                     </div>
                   </div>
@@ -60,14 +107,15 @@ export default function AddProduct() {
                       Price
                     </label>
                     <div className="mt-2">
-                      <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                        <input
-                          id="price"
-                          name="price"
-                          type="text"
-                          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                        />
-                      </div>
+                      <input
+                        type="number"
+                        name="price"
+                        id="price"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        required
+                      />
                     </div>
                   </div>
 
@@ -81,10 +129,10 @@ export default function AddProduct() {
                     <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                       <div className="text-center">
                         <PhotoIcon
-                          aria-hidden="true"
                           className="mx-auto h-12 w-12 text-gray-300"
+                          aria-hidden="true"
                         />
-                        <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                        <div className="mt-4 flex text-sm justify-center leading-6 text-gray-600">
                           <label
                             htmlFor="file-upload"
                             className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
@@ -95,9 +143,12 @@ export default function AddProduct() {
                               name="file-upload"
                               type="file"
                               className="sr-only"
+                              onChange={(e) =>
+                                setFile(e.target.files?.[0] || null)
+                              }
+                              required
                             />
                           </label>
-                          <p className="pl-1">or drag and drop</p>
                         </div>
                         <p className="text-xs leading-5 text-gray-600">
                           PNG, JPG, GIF up to 4.5MB
