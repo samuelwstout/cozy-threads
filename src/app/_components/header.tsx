@@ -2,7 +2,7 @@ import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 
 export default function Header() {
   return (
-    <div className="border-b-2 border-b-neutral-300 mx-3 py-8 flex flex-row justify-center items-center">
+    <div className="sticky top-0 border-b-2 border-b-neutral-300 mx-3 py-8 flex flex-row justify-center items-center bg-white z-10">
       <span>COZY THREADS</span>
       <div className="absolute right-4 p-5">
         <a href="#" className="flex items-center p-2">
