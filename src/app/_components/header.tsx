@@ -12,12 +12,12 @@ export default function Header() {
               <div className="border-b border-gray-200">
                 <div className="flex h-16 items-center justify-between">
                   <div className="hidden lg:flex lg:flex-1 lg:items-center">
-                    <a href="#">
+                    <a href="/">
                       <span>COZY THREADS</span>
                     </a>
                   </div>
 
-                  <a href="#" className="lg:hidden">
+                  <a href="/" className="lg:hidden">
                     <span>COZY THREADS</span>
                   </a>
 
