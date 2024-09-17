@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Product } from "../api/products/route";
 
 interface ProductListProps {
@@ -20,10 +21,10 @@ export default function ProductList({ products }: ProductListProps) {
               <div className="mt-4 flex justify-between">
                 <div>
                   <h3 className="text-sm text-gray-700">
-                    <a href="#">
+                    <Link href={`/product/${product.id}`}>
                       <span aria-hidden="true" className="absolute inset-0" />
                       {product.title}
-                    </a>
+                    </Link>
                   </h3>
                 </div>
                 <p className="text-sm font-medium text-gray-900">
