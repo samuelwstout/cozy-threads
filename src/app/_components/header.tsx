@@ -1,8 +1,12 @@
 "use client";
 
+import { useOpenShoppingCart } from "@/globalState/shoppingCartStore";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 
 export default function Header() {
+  const setOpenShoppingCart = useOpenShoppingCart(
+    (state) => state.setOpenShoppingCart
+  );
   return (
     <div className="bg-white">
       <header className="relative">
@@ -24,8 +28,8 @@ export default function Header() {
                   <div className="flex flex-1 items-center justify-end">
                     <div className="flex items-center lg:ml-8">
                       <div className="ml-4 flow-root lg:ml-8">
-                        <a
-                          href="#"
+                        <button
+                          onClick={setOpenShoppingCart}
                           className="group -m-2 flex items-center p-2"
                         >
                           <ShoppingBagIcon
@@ -38,7 +42,7 @@ export default function Header() {
                           <span className="sr-only">
                             items in cart, view bag
                           </span>
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>

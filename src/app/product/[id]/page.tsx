@@ -1,7 +1,9 @@
 "use client";
 
 import Header from "@/app/_components/header";
+import ShoppingCart from "@/app/_components/shoppingCart";
 import { Product } from "@/app/api/products/route";
+import { useOpenShoppingCart } from "@/globalState/shoppingCartStore";
 import { useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
 
@@ -18,6 +20,10 @@ const productDetails = [
 
 export default function ProductPage({ params }: PageProps) {
   const { id } = params;
+
+  const openShoppingCart = useOpenShoppingCart(
+    (state) => state.openShoppingCart
+  );
 
   const [product, setProduct] = useState<Product>();
   const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +51,7 @@ export default function ProductPage({ params }: PageProps) {
 
   return (
     <div className="bg-white">
+      {openShoppingCart && <ShoppingCart />}
       <Header />
       {isLoading ? (
         <div className="flex flex-row h-screen justify-center items-center">

@@ -1,10 +1,16 @@
 "use client";
 
+import { useOpenShoppingCart } from "@/globalState/shoppingCartStore";
 import Header from "../_components/header";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { useState, FormEvent } from "react";
+import ShoppingCart from "../_components/shoppingCart";
 
 export default function AddProduct() {
+  const openShoppingCart = useOpenShoppingCart(
+    (state) => state.openShoppingCart
+  );
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -48,6 +54,7 @@ export default function AddProduct() {
 
   return (
     <div>
+      {openShoppingCart && <ShoppingCart />}
       <Header />
       <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="mt-6 gap-x-6 gap-y-10 xl:gap-x-8">
