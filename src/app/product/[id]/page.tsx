@@ -36,8 +36,6 @@ export default function ProductPage({ params }: PageProps) {
     (state) => state.shoppingCartProducts
   );
 
-  useEffect(() => console.log(shoppingCartProducts), [shoppingCartProducts]);
-
   const [product, setProduct] = useState<Product>();
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);

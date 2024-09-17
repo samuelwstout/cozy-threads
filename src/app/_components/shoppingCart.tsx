@@ -7,36 +7,13 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useOpenShoppingCart } from "@/globalState/shoppingCartStore";
+import {
+  useOpenShoppingCart,
+  useShoppingCartProducts,
+} from "@/globalState/shoppingCartStore";
 import Link from "next/link";
-
-const products = [
-  {
-    id: 1,
-    name: "Throwback Hip Bag",
-    href: "#",
-    color: "Salmon",
-    price: "$90.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
-    imageAlt:
-      "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
-  },
-  {
-    id: 2,
-    name: "Medium Stuff Satchel",
-    href: "#",
-    color: "Blue",
-    price: "$32.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
-    imageAlt:
-      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
-  },
-  // More products...
-];
+import { useEffect, useState } from "react";
+import { Product } from "../api/products/route";
 
 export default function ShoppingCart() {
   const openShoppingCart = useOpenShoppingCart(
@@ -45,6 +22,45 @@ export default function ShoppingCart() {
   const setOpenShoppingCart = useOpenShoppingCart(
     (state) => state.setOpenShoppingCart
   );
+  const shoppingCartProducts = useShoppingCartProducts(
+    (state) => state.shoppingCartProducts
+  );
+
+  const [subtotal, setSubtotal] = useState<number>(0);
+  const [productQuantities, setProductQuantities] = useState<
+    Record<string, number>
+  >({});
+
+  useEffect(() => {
+    const quantities: Record<string, number> = {};
+    const subtotal = shoppingCartProducts.reduce((total, product) => {
+      quantities[product.id.toString()] =
+        (quantities[product.id.toString()] || 0) + 1;
+      return total + product.price;
+    }, 0);
+
+    setSubtotal(subtotal);
+    setProductQuantities(quantities);
+  }, [shoppingCartProducts]);
+
+  const removeOneProduct = (productId: number | string) => {
+    const updatedProducts = shoppingCartProducts.filter(
+      (product, index) =>
+        !(
+          product.id.toString() === productId.toString() &&
+          shoppingCartProducts.findIndex(
+            (p) => p.id.toString() === productId.toString()
+          ) === index
+        )
+    );
+
+    // Reset the cart with the updated products
+    useShoppingCartProducts.setState({ shoppingCartProducts: updatedProducts });
+  };
+
+  const uniqueProducts = Object.keys(productQuantities)
+    .map((id) => shoppingCartProducts.find((p) => p.id.toString() === id))
+    .filter((product): product is Product => product !== undefined);
 
   return (
     <Dialog
@@ -89,12 +105,12 @@ export default function ShoppingCart() {
                         role="list"
                         className="-my-6 divide-y divide-gray-200"
                       >
-                        {products.map((product) => (
+                        {uniqueProducts.map((product) => (
                           <li key={product.id} className="flex py-6">
                             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                               <img
-                                alt={product.imageAlt}
-                                src={product.imageSrc}
+                                alt={product.title}
+                                src={product.imageUrl}
                                 className="h-full w-full object-cover object-center"
                               />
                             </div>
@@ -102,23 +118,19 @@ export default function ShoppingCart() {
                             <div className="ml-4 flex flex-1 flex-col">
                               <div>
                                 <div className="flex justify-between text-base font-medium text-gray-900">
-                                  <h3>
-                                    <a href={product.href}>{product.name}</a>
-                                  </h3>
-                                  <p className="ml-4">{product.price}</p>
+                                  <h3>{product.title}</h3>
+                                  <p className="ml-4">${product.price}</p>
                                 </div>
-                                <p className="mt-1 text-sm text-gray-500">
-                                  {product.color}
-                                </p>
                               </div>
                               <div className="flex flex-1 items-end justify-between text-sm">
                                 <p className="text-gray-500">
-                                  Qty {product.quantity}
+                                  Qty {productQuantities[product.id.toString()]}
                                 </p>
 
                                 <div className="flex">
                                   <button
                                     type="button"
+                                    onClick={() => removeOneProduct(product.id)}
                                     className="font-medium text-indigo-600 hover:text-indigo-500"
                                   >
                                     Remove
@@ -136,7 +148,7 @@ export default function ShoppingCart() {
                 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                   <div className="flex justify-between text-base font-medium text-gray-900">
                     <p>Subtotal</p>
-                    <p>$262.00</p>
+                    <p>${subtotal.toFixed(2)}</p>
                   </div>
                   <p className="mt-0.5 text-sm text-gray-500">
                     Shipping and taxes calculated at checkout.
