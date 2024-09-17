@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { db } from "@/db";
 import { productsTable } from "@/db/schema";
+import Stripe from "stripe";
 
 export interface Product {
   id: number;
@@ -26,6 +27,8 @@ export async function GET() {
   }
 }
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
@@ -41,10 +44,20 @@ export async function POST(request: Request) {
       );
     }
 
-    // Upload image to Vercel Blob
     const blob = await put(image.name, image, { access: "public" });
 
-    // Insert product into database
+    const stripeProduct = await stripe.products.create({
+      name: title,
+      description: description,
+      images: [blob.url],
+    });
+
+    const stripePrice = await stripe.prices.create({
+      product: stripeProduct.id,
+      unit_amount: price * 100,
+      currency: "usd",
+    });
+
     const [product] = await db
       .insert(productsTable)
       .values({
@@ -52,6 +65,8 @@ export async function POST(request: Request) {
         description,
         price,
         imageUrl: blob.url,
+        stripeProductId: stripeProduct.id,
+        stripePriceId: stripePrice.id,
       })
       .returning();
 
