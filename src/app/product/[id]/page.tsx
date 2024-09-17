@@ -32,10 +32,6 @@ export default function ProductPage({ params }: PageProps) {
     (state) => state.setShoppingCartProducts
   );
 
-  const shoppingCartProducts = useShoppingCartProducts(
-    (state) => state.shoppingCartProducts
-  );
-
   const [product, setProduct] = useState<Product>();
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
