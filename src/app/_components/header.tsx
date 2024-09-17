@@ -1,11 +1,17 @@
 "use client";
 
-import { useOpenShoppingCart } from "@/globalState/shoppingCartStore";
+import {
+  useOpenShoppingCart,
+  useShoppingCartProducts,
+} from "@/globalState/shoppingCartStore";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 
 export default function Header() {
   const setOpenShoppingCart = useOpenShoppingCart(
     (state) => state.setOpenShoppingCart
+  );
+  const shoppingCartProducts = useShoppingCartProducts(
+    (state) => state.shoppingCartProducts
   );
   return (
     <div className="bg-white">
@@ -37,7 +43,7 @@ export default function Header() {
                             className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                           />
                           <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                            0
+                            {shoppingCartProducts.length}
                           </span>
                           <span className="sr-only">
                             items in cart, view bag

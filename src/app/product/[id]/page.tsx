@@ -3,7 +3,10 @@
 import Header from "@/app/_components/header";
 import ShoppingCart from "@/app/_components/shoppingCart";
 import { Product } from "@/app/api/products/route";
-import { useOpenShoppingCart } from "@/globalState/shoppingCartStore";
+import {
+  useOpenShoppingCart,
+  useShoppingCartProducts,
+} from "@/globalState/shoppingCartStore";
 import { useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
 
@@ -24,6 +27,16 @@ export default function ProductPage({ params }: PageProps) {
   const openShoppingCart = useOpenShoppingCart(
     (state) => state.openShoppingCart
   );
+
+  const setShoppingCartProducts = useShoppingCartProducts(
+    (state) => state.setShoppingCartProducts
+  );
+
+  const shoppingCartProducts = useShoppingCartProducts(
+    (state) => state.shoppingCartProducts
+  );
+
+  useEffect(() => console.log(shoppingCartProducts), [shoppingCartProducts]);
 
   const [product, setProduct] = useState<Product>();
   const [isLoading, setIsLoading] = useState(true);
@@ -47,7 +60,7 @@ export default function ProductPage({ params }: PageProps) {
     };
 
     fetchProduct();
-  }, []);
+  }, [id]);
 
   return (
     <div className="bg-white">
@@ -117,14 +130,12 @@ export default function ProductPage({ params }: PageProps) {
                   </div>
                 </div>
 
-                <form>
-                  <button
-                    type="submit"
-                    className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  >
-                    Add to cart
-                  </button>
-                </form>
+                <button
+                  onClick={() => setShoppingCartProducts(product)}
+                  className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  Add to cart
+                </button>
               </div>
             </div>
           </main>
