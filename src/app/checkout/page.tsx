@@ -34,7 +34,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="bg-white">
-      <Header />
+      <Header renderShoppingCart={false} />
       <div className="flex flex-col items-center justify-center mx-auto max-w-2xl px-4 py-5 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
         {/* Order summary */}
         <div className="my-10 w-full">

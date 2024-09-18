@@ -59,7 +59,7 @@ export default function ProductPage({ params }: PageProps) {
   return (
     <div className="bg-white">
       {openShoppingCart && <ShoppingCart />}
-      <Header />
+      <Header renderShoppingCart />
       {isLoading ? (
         <div className="flex flex-row h-screen justify-center items-center">
           <BeatLoader size={10} />

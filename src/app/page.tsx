@@ -41,7 +41,7 @@ export default function Home() {
   return (
     <main className="w-full h-screen flex flex-col justify-between">
       {openShoppingCart && <ShoppingCart />}
-      <Header />
+      <Header renderShoppingCart />
       {isLoading ? (
         <div className="flex flex-row justify-center items-center">
           <BeatLoader size={10} />

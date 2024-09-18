@@ -197,7 +197,7 @@ function CompletePageContent() {
 export default function CompletePage() {
   return (
     <div>
-      <Header />
+      <Header renderShoppingCart={false} />
       <Elements stripe={stripePromise}>
         <CompletePageContent />
       </Elements>
