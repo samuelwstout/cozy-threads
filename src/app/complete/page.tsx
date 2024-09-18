@@ -88,7 +88,7 @@ const STATUS_CONTENT_MAP = {
     iconColor: "#DF1B41",
     icon: ErrorIcon,
   },
-  default: {
+  error: {
     text: "Something went wrong, please try again.",
     iconColor: "#DF1B41",
     icon: ErrorIcon,
@@ -98,7 +98,7 @@ const STATUS_CONTENT_MAP = {
 function CompletePageContent() {
   const stripe = useStripe();
 
-  const [status, setStatus] = useState("default");
+  const [status, setStatus] = useState("processing");
   const [intentId, setIntentId] = useState<string | null>(null);
 
   const resetShoppingCart = useShoppingCartProducts(
@@ -118,13 +118,13 @@ function CompletePageContent() {
       return;
     }
 
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      if (!paymentIntent) {
-        return;
+    stripe.retrievePaymentIntent(clientSecret).then((result) => {
+      if (result.error) {
+        setStatus("error");
+      } else if (result.paymentIntent) {
+        setStatus(result.paymentIntent.status);
+        setIntentId(result.paymentIntent.id);
       }
-
-      setStatus(paymentIntent.status);
-      setIntentId(paymentIntent.id);
     });
   }, [stripe]);
 
