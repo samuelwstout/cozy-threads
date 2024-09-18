@@ -5,6 +5,7 @@ import Header from "../_components/header";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { useState, FormEvent } from "react";
 import ShoppingCart from "../_components/shoppingCart";
+import { BeatLoader } from "react-spinners";
 
 export default function AddProduct() {
   const openShoppingCart = useOpenShoppingCart(
@@ -15,12 +16,15 @@ export default function AddProduct() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!file) {
       alert("Please select an image file");
+      setIsLoading(false);
       return;
     }
 
@@ -42,17 +46,25 @@ export default function AddProduct() {
         setDescription("");
         setPrice("");
         setFile(null);
+        setIsLoading(false);
       } else {
         alert("Failed to add product");
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred while adding the product");
+      setIsLoading(false);
     }
   };
 
   return (
-    <div>
+    <div className="relative">
+      {isLoading && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center">
+          <BeatLoader size={15} color="#ffffff" />
+        </div>
+      )}
       {openShoppingCart && <ShoppingCart />}
       <Header renderShoppingCart={false} />
       <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -178,6 +190,7 @@ export default function AddProduct() {
                 <button
                   type="submit"
                   className="rounded-md bg-slate-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
+                  disabled={isLoading}
                 >
                   Save
                 </button>
