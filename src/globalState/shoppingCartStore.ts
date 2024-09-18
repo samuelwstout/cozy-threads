@@ -31,7 +31,7 @@ export const useShoppingCartProducts = create<ShoppingCartProductState>()(
     }),
     {
       name: "shopping-cart-storage",
-      storage: createJSONStorage(() => sessionStorage),
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
