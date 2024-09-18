@@ -38,7 +38,6 @@ export default function AddProduct() {
 
       if (response.ok) {
         alert("Product added successfully");
-        // Reset form
         setTitle("");
         setDescription("");
         setPrice("");

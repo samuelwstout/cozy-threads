@@ -47,8 +47,6 @@ export default function ShoppingCart() {
           ) === index
         )
     );
-
-    // Reset the cart with the updated products
     useShoppingCartProducts.setState({ shoppingCartProducts: updatedProducts });
   };
 
