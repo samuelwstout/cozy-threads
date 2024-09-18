@@ -5,6 +5,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements, useStripe } from "@stripe/react-stripe-js";
 import Header from "../_components/header";
 import "../checkout.css";
+import { useShoppingCartProducts } from "@/globalState/shoppingCartStore";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -100,6 +101,10 @@ function CompletePageContent() {
   const [status, setStatus] = useState("default");
   const [intentId, setIntentId] = useState<string | null>(null);
 
+  const resetShoppingCart = useShoppingCartProducts(
+    (state) => state.resetShoppingCart
+  );
+
   useEffect(() => {
     if (!stripe) {
       return;
@@ -122,6 +127,12 @@ function CompletePageContent() {
       setIntentId(paymentIntent.id);
     });
   }, [stripe]);
+
+  useEffect(() => {
+    if (status === "succeeded") {
+      resetShoppingCart();
+    }
+  }, [status, resetShoppingCart]);
 
   return (
     <div id="payment-status">

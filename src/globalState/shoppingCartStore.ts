@@ -10,6 +10,7 @@ export interface ShoppingCartState {
 export interface ShoppingCartProductState {
   shoppingCartProducts: Product[];
   setShoppingCartProducts: (product: Product) => void;
+  resetShoppingCart: () => void;
 }
 
 export const useOpenShoppingCart = create<ShoppingCartState>((set) => ({
@@ -26,6 +27,7 @@ export const useShoppingCartProducts = create<ShoppingCartProductState>()(
         set((state) => ({
           shoppingCartProducts: [...state.shoppingCartProducts, product],
         })),
+      resetShoppingCart: () => set({ shoppingCartProducts: [] }),
     }),
     {
       name: "shopping-cart-storage",
