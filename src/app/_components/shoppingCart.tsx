@@ -62,7 +62,7 @@ export default function ShoppingCart() {
     <Dialog
       open={openShoppingCart}
       onClose={setOpenShoppingCart}
-      className="relative z-10"
+      className="relative z-20"
     >
       <DialogBackdrop
         transition
@@ -85,7 +85,7 @@ export default function ShoppingCart() {
                       </p>
                       <button
                         onClick={setOpenShoppingCart}
-                        className="text-blue-600 hover:text-blue-700"
+                        className="text-slate-600 hover:text-slate-700"
                       >
                         Start Shopping
                       </button>
@@ -126,7 +126,7 @@ export default function ShoppingCart() {
                                       onClick={() =>
                                         removeOneProduct(product.id)
                                       }
-                                      className="font-medium text-blue-600 hover:text-blue-500"
+                                      className="font-medium text-slate-600 hover:text-slate-500"
                                     >
                                       Remove
                                     </button>
@@ -154,7 +154,7 @@ export default function ShoppingCart() {
                       <Link
                         onClick={setOpenShoppingCart}
                         href="/checkout"
-                        className={`flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 ${
+                        className={`flex items-center justify-center rounded-md border border-transparent bg-slate-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-slate-700 ${
                           isCartEmpty ? "opacity-50 cursor-not-allowed" : ""
                         }`}
                         aria-disabled={isCartEmpty}
@@ -168,7 +168,7 @@ export default function ShoppingCart() {
                         <button
                           type="button"
                           onClick={setOpenShoppingCart}
-                          className="font-medium text-blue-600 hover:text-blue-500"
+                          className="font-medium text-slate-600 hover:text-slate-500"
                         >
                           Continue Shopping
                           <span aria-hidden="true"> &rarr;</span>

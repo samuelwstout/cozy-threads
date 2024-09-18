@@ -10,6 +10,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { useShoppingCartProducts } from "@/globalState/shoppingCartStore";
 import "../checkout.css";
+import { BeatLoader } from "react-spinners";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -86,30 +87,51 @@ function CheckoutForm({ dpmCheckerLink }: { dpmCheckerLink: string }) {
 
 export default function Checkout() {
   const [clientSecret, setClientSecret] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const shoppingCartProducts = useShoppingCartProducts(
     (state) => state.shoppingCartProducts
   );
   const [dpmCheckerLink, setDpmCheckerLink] = useState("");
 
   useEffect(() => {
+    setIsLoading(true);
+    setError(null);
     fetch("/api/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ items: shoppingCartProducts }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to create payment intent");
+        }
+        return res.json();
+      })
       .then((data) => {
         setClientSecret(data.clientSecret);
         setDpmCheckerLink(data.dpmCheckerLink);
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [shoppingCartProducts]);
 
   return (
     <div>
-      {clientSecret && (
+      {isLoading ? (
+        <BeatLoader size={10} />
+      ) : error ? (
+        <div className="error-message">{error}</div>
+      ) : clientSecret ? (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <CheckoutForm dpmCheckerLink={dpmCheckerLink} />
         </Elements>
+      ) : (
+        <div className="error-message">Unable to initialize payment</div>
       )}
     </div>
   );

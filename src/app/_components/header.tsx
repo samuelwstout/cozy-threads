@@ -18,7 +18,7 @@ export default function Header({ renderShoppingCart }: HeaderProps) {
     (state) => state.shoppingCartProducts
   );
   return (
-    <div className="bg-white">
+    <div className="bg-white sticky top-0 z-10">
       <header className="relative">
         <nav aria-label="Top">
           <div className="bg-white">
@@ -26,12 +26,12 @@ export default function Header({ renderShoppingCart }: HeaderProps) {
               <div className="border-b border-gray-200">
                 <div className="flex h-16 items-center justify-between">
                   <div className="hidden lg:flex lg:flex-1 lg:items-center">
-                    <a href="/">
+                    <a href="/" className="cozy-threads-logo text-lg">
                       <span>COZY THREADS</span>
                     </a>
                   </div>
 
-                  <a href="/" className="lg:hidden">
+                  <a href="/" className="lg:hidden cozy-threads-logo text-lg">
                     <span>COZY THREADS</span>
                   </a>
                   {renderShoppingCart && (
