@@ -157,6 +157,11 @@ export default function AddProduct() {
                             />
                           </label>
                         </div>
+                        {file && (
+                          <p className="text-sm leading-5 text-gray-600 my-1">
+                            {file.name}
+                          </p>
+                        )}
                         <p className="text-xs leading-5 text-gray-600">
                           PNG, JPG, GIF up to 4.5MB
                         </p>
