@@ -131,7 +131,7 @@ export default function ShoppingCart() {
                                   <button
                                     type="button"
                                     onClick={() => removeOneProduct(product.id)}
-                                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                                    className="font-medium text-blue-600 hover:text-blue-500"
                                   >
                                     Remove
                                   </button>
@@ -157,7 +157,7 @@ export default function ShoppingCart() {
                     <Link
                       onClick={setOpenShoppingCart}
                       href="/checkout"
-                      className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                      className="flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700"
                     >
                       Checkout
                     </Link>
@@ -168,7 +168,7 @@ export default function ShoppingCart() {
                       <button
                         type="button"
                         onClick={setOpenShoppingCart}
-                        className="font-medium text-indigo-600 hover:text-indigo-500"
+                        className="font-medium text-blue-600 hover:text-blue-500"
                       >
                         Continue Shopping
                         <span aria-hidden="true"> &rarr;</span>
