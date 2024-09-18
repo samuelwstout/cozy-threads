@@ -34,7 +34,7 @@ export default function Header() {
                   <div className="flex flex-1 items-center justify-end">
                     <div className="flex items-center lg:ml-8">
                       <div className="ml-4 flow-root lg:ml-8">
-                        <button
+                        <div
                           onClick={setOpenShoppingCart}
                           className="group -m-2 flex items-center p-2"
                         >
@@ -48,7 +48,7 @@ export default function Header() {
                           <span className="sr-only">
                             items in cart, view bag
                           </span>
-                        </button>
+                        </div>
                       </div>
                     </div>
                   </div>
