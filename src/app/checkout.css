@@ -32,7 +32,7 @@ form {
 }
 
 /* Buttons and links */
-button {
+#submit {
   background: #0055de;
   font-family: Arial, sans-serif;
   color: #ffffff;
@@ -48,11 +48,11 @@ button {
   width: 100%;
 }
 
-button:hover {
+#submit:hover {
   filter: contrast(115%);
 }
 
-button:disabled {
+#submit:disabled {
   opacity: 0.5;
   cursor: default;
 }
