@@ -11,6 +11,7 @@ refund
 import { useEffect, useState } from "react";
 
 export default function ListPayments() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [paymentIntents, setPaymentIntents] = useState<any[]>();
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export default function ListPayments() {
         const date = new Date(item.created * 1000);
         const dateString = date.toString();
         return (
-          <div>
+          <div key={item.id}>
             <p>{item.id}</p>
             <p>${item.amount / 100}</p>
             <p>{dateString}</p>
