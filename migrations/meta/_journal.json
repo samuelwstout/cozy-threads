@@ -71,6 +71,13 @@
       "when": 1726588502987,
       "tag": "0009_magenta_lilandra",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1735678073257,
+      "tag": "0010_giant_skrulls",
+      "breakpoints": true
     }
   ]
 }
