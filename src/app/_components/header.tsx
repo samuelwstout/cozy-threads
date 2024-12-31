@@ -26,13 +26,13 @@ export default function Header({ renderShoppingCart }: HeaderProps) {
               <div className="border-b border-gray-200">
                 <div className="flex h-16 items-center justify-between">
                   <div className="hidden lg:flex lg:flex-1 lg:items-center">
-                    <a href="/" className="cozy-threads-logo text-lg">
-                      <span>COZY THREADS</span>
+                    <a href="/" className="text-lg">
+                      <span>ECOMMERCE DEMO</span>
                     </a>
                   </div>
 
-                  <a href="/" className="lg:hidden cozy-threads-logo text-lg">
-                    <span>COZY THREADS</span>
+                  <a href="/" className="lg:hidden text-lg">
+                    <span>ECOMMERCE DEMO</span>
                   </a>
                   {renderShoppingCart && (
                     <div className="flex flex-1 items-center justify-end">
