@@ -97,27 +97,29 @@ export default function Checkout() {
   useEffect(() => {
     setIsLoading(true);
     setError(null);
-    fetch("/api/create-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items: shoppingCartProducts }),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to create payment intent");
-        }
-        return res.json();
+    if (shoppingCartProducts.length !== 0) {
+      fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: shoppingCartProducts }),
       })
-      .then((data) => {
-        setClientSecret(data.clientSecret);
-        setDpmCheckerLink(data.dpmCheckerLink);
-      })
-      .catch((err) => {
-        setError(err.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Failed to create payment intent");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          setClientSecret(data.clientSecret);
+          setDpmCheckerLink(data.dpmCheckerLink);
+        })
+        .catch((err) => {
+          setError(err.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   }, [shoppingCartProducts]);
 
   return (
