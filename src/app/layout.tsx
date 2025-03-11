@@ -16,8 +16,8 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-  title: "Ecommerce Demo",
-  description: "Ecommerce Demo",
+  title: "Cozy Threads",
+  description: "Cozy Threads",
 };
 
 export default function RootLayout({
