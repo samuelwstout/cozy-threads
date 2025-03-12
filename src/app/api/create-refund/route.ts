@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   try {
     const { id } = await req.json();
 
-    const refund = stripe.refunds.create({
+    const refund = await stripe.refunds.create({
       payment_intent: id,
     });
 
@@ -16,5 +16,9 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error(error);
+    return NextResponse.json(
+      { error: "Failed to process refund" },
+      { status: 500 }
+    );
   }
 }

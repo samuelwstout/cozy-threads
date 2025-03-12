@@ -1,4 +1,5 @@
 "use client";
+
 /*
 - use payment intents api to list all payments
 - id, amount, date
@@ -8,11 +9,13 @@
 refund 
 - create a button to invoke a POST to create the refund
 */
+
 import { useEffect, useState } from "react";
+import Stripe from "stripe";
 
 export default function ListPayments() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [paymentIntents, setPaymentIntents] = useState<any[]>();
+  const [paymentIntents, setPaymentIntents] =
+    useState<Stripe.PaymentIntent[]>();
 
   useEffect(() => {
     const fetchPaymentIntents = async () => {
@@ -29,8 +32,6 @@ export default function ListPayments() {
     };
     fetchPaymentIntents();
   }, []);
-
-  // var date = new Date(unix_timestamp * 1000);
 
   async function createRefund(id: string) {
     try {
