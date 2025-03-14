@@ -40,7 +40,7 @@ export default function Header({ renderShoppingCart }: HeaderProps) {
                         <div className="ml-4 flow-root lg:ml-8">
                           <div
                             onClick={setOpenShoppingCart}
-                            className="group -m-2 flex items-center p-2"
+                            className="group -m-2 flex items-center p-2 cursor-pointer"
                           >
                             <ShoppingBagIcon
                               aria-hidden="true"
