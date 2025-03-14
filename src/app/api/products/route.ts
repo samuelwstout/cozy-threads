@@ -14,20 +14,23 @@ export interface Product {
   updateAt: Date | null;
 }
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
 export async function GET() {
   try {
     const products: Product[] = await db.select().from(productsTable);
     return NextResponse.json(products);
   } catch (error) {
     console.error("Error fetching products:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch products" },
-      { status: 500 }
-    );
+
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Unknown error fetching products";
+
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(request: Request) {
   try {
@@ -76,9 +79,10 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Error adding product:", error);
-    return NextResponse.json(
-      { error: "Failed to add product" },
-      { status: 500 }
-    );
+
+    const message =
+      error instanceof Error ? error.message : "Unknown error adding product";
+
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
