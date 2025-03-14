@@ -3,11 +3,12 @@ import { db } from "@/db";
 import { productsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(_: Request, { params }: { params: { id: string } }) {
   const id = parseInt(params.id, 10);
+
+  if (isNaN(id) || id <= 0) {
+    return NextResponse.json({ error: "Invalid product id" }, { status: 400 });
+  }
 
   try {
     const [product] = await db
@@ -23,9 +24,10 @@ export async function GET(
     return NextResponse.json(product);
   } catch (error) {
     console.error("Error fetching product:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch product" },
-      { status: 500 }
-    );
+
+    const message =
+      error instanceof Error ? error.message : "Unknown error fetching product";
+
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
