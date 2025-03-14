@@ -14,22 +14,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid items" }, { status: 400 });
     }
 
-    // Fetch product details from the database
     const productIds = items.map((item: { id: number }) => item.id);
     const products = await db
       .select()
       .from(productsTable)
       .where(inArray(productsTable.id, productIds));
 
-    // Calculate the total amount
     const totalAmount = products.reduce(
       (total, product) => total + product.price,
       0
     );
 
-    // Create a PaymentIntent
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: totalAmount * 100, // Stripe uses cents
+      amount: totalAmount * 100,
       currency: "usd",
       automatic_payment_methods: {
         enabled: true,
@@ -42,10 +39,13 @@ export async function POST(request: Request) {
       dpmCheckerLink: `https://dashboard.stripe.com/settings/payment_methods/review?transaction_id=${paymentIntent.id}`,
     });
   } catch (error) {
-    console.error("Error creating PaymentIntent:", error);
-    return NextResponse.json(
-      { error: "Error creating PaymentIntent" },
-      { status: 500 }
-    );
+    console.error("error creating payment intent:", error);
+
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Unknown error creating payment intent";
+
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
