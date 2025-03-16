@@ -2,7 +2,6 @@ import Footer from "./_components/footer";
 import Header from "./_components/header";
 import ProductList from "./_components/productList";
 import { Product } from "./api/products/route";
-import { headers } from "next/headers";
 import { ShoppingCartWrapper } from "./_components/ShoppingCartWrapper";
 
 const baseUrl =
@@ -13,7 +12,6 @@ const baseUrl =
 export default async function Home() {
   try {
     const response = await fetch(`${baseUrl}/api/products`, {
-      headers: headers(),
       cache: "force-cache",
     });
 
