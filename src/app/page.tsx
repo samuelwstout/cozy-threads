@@ -32,12 +32,15 @@ export default async function Home() {
       </main>
     );
   } catch (error) {
-    console.error(error);
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : "Unknown error fetching products";
     return (
       <main className="w-full h-screen flex flex-col justify-between">
         <Header renderShoppingCart />
         <div className="flex flex-row justify-center items-center">
-          <h1>An error occurred. Please try again later.</h1>
+          <h1>{errorMessage}</h1>
         </div>
         <Footer />
       </main>
