@@ -11,9 +11,7 @@ const baseUrl =
 
 export default async function Home() {
   try {
-    const response = await fetch(`${baseUrl}/api/products`, {
-      cache: "force-cache",
-    });
+    const response = await fetch(`${baseUrl}/api/products`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch products");
