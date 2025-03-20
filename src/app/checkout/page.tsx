@@ -35,8 +35,11 @@ export default function CheckoutPage() {
   return (
     <div className="bg-white">
       <Header renderShoppingCart={false} />
-      <div className="flex flex-col items-center justify-center mx-auto max-w-2xl px-4 py-5 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
-        <div className="my-10 w-full">
+      <div className="border border-red-500 flex flex-row items-center justify-center mx-auto max-w-2xl px-4 py-5 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8 gap-5">
+        <div className="border border-green-500 w-full flex justify-center">
+          <Checkout />
+        </div>
+        <div className="my-10 w-full border border-blue-500">
           <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
             <ul role="list" className="divide-y divide-gray-200">
               {uniqueProducts.map((product) => (
@@ -80,7 +83,6 @@ export default function CheckoutPage() {
             </dl>
           </div>
         </div>
-        <Checkout />
       </div>
     </div>
   );
