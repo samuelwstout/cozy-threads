@@ -17,10 +17,6 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
-const appearance = {
-  /* ... */
-};
-
 const loader = "auto";
 
 export default function CheckoutPage() {
@@ -32,15 +28,10 @@ export default function CheckoutPage() {
   const [productQuantities, setProductQuantities] = useState<
     Record<string, number>
   >({});
-  const [openPaymentElement, setOpenPaymentElement] = useState(false);
   const [clientSecret, setClientSecret] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [dpmCheckerLink, setDpmCheckerLink] = useState("");
 
   useEffect(() => {
-    setIsLoading(true);
-    setError(null);
     if (shoppingCartProducts.length !== 0) {
       fetch("/api/create-payment-intent", {
         method: "POST",
@@ -58,10 +49,7 @@ export default function CheckoutPage() {
           setDpmCheckerLink(data.dpmCheckerLink);
         })
         .catch((err) => {
-          setError(err.message);
-        })
-        .finally(() => {
-          setIsLoading(false);
+          console.error(err.message);
         });
     }
   }, [shoppingCartProducts]);
@@ -85,25 +73,18 @@ export default function CheckoutPage() {
   return (
     <div className="bg-white">
       <Header renderShoppingCart={false} />
-      <div className="border border-red-500 flex flex-row items-center justify-center mx-auto max-w-2xl px-4 py-5 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8 gap-5">
+      <div className="flex flex-col-reverse lg:flex-row items-center justify-center mx-auto max-w-2xl px-4 py-5 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8 gap-5">
         {clientSecret ? (
           <Elements stripe={stripePromise} options={{ clientSecret, loader }}>
-            <div className="border border-green-500 flex flex-col gap-2 p-5 w-full">
-              <div className="p-5">
+            <div className="flex flex-col gap-2 p-5 w-full h-screen">
+              <div className="pb-2">
                 <LinkAuthenticationElement />
               </div>
-              <div className="p-5">
+              <div className="pb-2">
                 <h3 className="pb-2">Shipping</h3>
-                <AddressElement
-                  options={{ mode: "shipping" }}
-                  onChange={(event) => {
-                    if (event.complete) {
-                      const address = event.value.address;
-                    }
-                  }}
-                />
+                <AddressElement options={{ mode: "shipping" }} />
               </div>
-              <div className="p-5">
+              <div className="flex flex-col justify-center lg:block">
                 <CheckoutForm dpmCheckerLink={dpmCheckerLink} />
               </div>
             </div>
@@ -113,12 +94,12 @@ export default function CheckoutPage() {
             <BeatLoader size={10} />
           </div>
         )}
-        <div className="my-10 w-full border border-blue-500">
-          <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
+        <div className="w-full h-auto lg:h-screen mb-8 lg:mb-0">
+          <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
             <ul role="list" className="divide-y divide-gray-200">
               {uniqueProducts.map((product) => (
                 <li key={product.id} className="flex px-4 py-6 sm:px-6">
-                  <div className="">
+                  <div>
                     <img
                       alt={product.title}
                       src={product.imageUrl}
