@@ -1,10 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Checkout from "../_components/Checkout";
 import Header from "../_components/Header";
 import { useShoppingCartProducts } from "@/globalState/shoppingCartStore";
 import { Product } from "../api/products/route";
+import {
+  AddressElement,
+  Elements,
+  LinkAuthenticationElement,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import CheckoutForm from "../_components/Checkout";
+import { BeatLoader } from "react-spinners";
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
+
+const appearance = {
+  /* ... */
+};
+
+const loader = "auto";
 
 export default function CheckoutPage() {
   const shoppingCartProducts = useShoppingCartProducts(
@@ -16,6 +33,38 @@ export default function CheckoutPage() {
     Record<string, number>
   >({});
   const [openPaymentElement, setOpenPaymentElement] = useState(false);
+  const [clientSecret, setClientSecret] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [dpmCheckerLink, setDpmCheckerLink] = useState("");
+
+  useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+    if (shoppingCartProducts.length !== 0) {
+      fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: shoppingCartProducts }),
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Failed to create payment intent");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          setClientSecret(data.clientSecret);
+          setDpmCheckerLink(data.dpmCheckerLink);
+        })
+        .catch((err) => {
+          setError(err.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [shoppingCartProducts]);
 
   useEffect(() => {
     const quantities: Record<string, number> = {};
@@ -37,13 +86,33 @@ export default function CheckoutPage() {
     <div className="bg-white">
       <Header renderShoppingCart={false} />
       <div className="border border-red-500 flex flex-row items-center justify-center mx-auto max-w-2xl px-4 py-5 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8 gap-5">
-        <div className="border border-green-500 flex flex-col gap-2 p-5 w-full">
-          <div className="border border-yellow-500 p-5"></div>
-          <div className="border border-yellow-500 p-5"></div>
-          <div className="border border-yellow-500 w-full flex justify-center p-5">
-            {!openPaymentElement && <Checkout />}
+        {clientSecret ? (
+          <Elements stripe={stripePromise} options={{ clientSecret, loader }}>
+            <div className="border border-green-500 flex flex-col gap-2 p-5 w-full">
+              <div className="p-5">
+                <LinkAuthenticationElement />
+              </div>
+              <div className="p-5">
+                <h3 className="pb-2">Shipping</h3>
+                <AddressElement
+                  options={{ mode: "shipping" }}
+                  onChange={(event) => {
+                    if (event.complete) {
+                      const address = event.value.address;
+                    }
+                  }}
+                />
+              </div>
+              <div className="p-5">
+                <CheckoutForm dpmCheckerLink={dpmCheckerLink} />
+              </div>
+            </div>
+          </Elements>
+        ) : (
+          <div className="w-full flex justify-center">
+            <BeatLoader size={10} />
           </div>
-        </div>
+        )}
         <div className="my-10 w-full border border-blue-500">
           <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
             <ul role="list" className="divide-y divide-gray-200">
