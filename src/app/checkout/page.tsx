@@ -73,18 +73,19 @@ export default function CheckoutPage() {
   return (
     <div className="bg-white">
       <Header renderShoppingCart={false} />
-      <div className="flex flex-col-reverse lg:flex-row items-center justify-center mx-auto max-w-2xl px-4 py-5 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8 gap-5">
+      <div className="flex flex-col-reverse lg:flex-row items-center justify-center mx-auto max-w-2xl px-4 py-5 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
         {clientSecret ? (
           <Elements stripe={stripePromise} options={{ clientSecret, loader }}>
             <div className="flex flex-col gap-2 p-5 w-full h-screen">
-              <div className="pb-2">
+              <div className="py-2">
                 <LinkAuthenticationElement />
               </div>
-              <div className="pb-2">
-                <h3 className="pb-2">Shipping</h3>
+              <div className="py-2">
+                <h3 className="pb-3 text-lg font-bold">Shipping</h3>
                 <AddressElement options={{ mode: "shipping" }} />
               </div>
-              <div className="flex flex-col justify-center lg:block">
+              <div className="flex flex-col justify-center lg:block py-2">
+                <h3 className="pb-3 text-lg font-bold">Payment</h3>
                 <CheckoutForm dpmCheckerLink={dpmCheckerLink} />
               </div>
             </div>
