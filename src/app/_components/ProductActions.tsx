@@ -5,7 +5,7 @@ import {
   useOpenShoppingCart,
   useShoppingCartProducts,
 } from "@/globalState/shoppingCartStore";
-import ShoppingCart from "./shoppingCart";
+import ShoppingCart from "./ShoppingCart";
 
 interface ProductActionsProps {
   product: Product;

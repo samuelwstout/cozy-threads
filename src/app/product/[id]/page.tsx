@@ -1,4 +1,4 @@
-import Header from "@/app/_components/header";
+import Header from "@/app/_components/Header";
 import { Product } from "@/app/api/products/route";
 import { ProductActions } from "@/app/_components/ProductActions";
 

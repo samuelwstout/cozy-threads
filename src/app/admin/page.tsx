@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "../_components/header";
+import Header from "../_components/Header";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { useState, FormEvent } from "react";
 import { BeatLoader } from "react-spinners";

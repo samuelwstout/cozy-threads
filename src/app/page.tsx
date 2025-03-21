@@ -1,6 +1,6 @@
-import Footer from "./_components/footer";
-import Header from "./_components/header";
-import ProductList from "./_components/productList";
+import Footer from "./_components/Footer";
+import Header from "./_components/Header";
+import ProductList from "./_components/ProductList";
 import { Product } from "./api/products/route";
 import { ShoppingCartWrapper } from "./_components/ShoppingCartWrapper";
 

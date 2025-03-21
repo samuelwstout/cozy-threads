@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, useStripe } from "@stripe/react-stripe-js";
-import Header from "../_components/header";
+import Header from "../_components/Header";
 import "../checkout.css";
 import { useShoppingCartProducts } from "@/globalState/shoppingCartStore";
 

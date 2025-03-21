@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Checkout from "../_components/checkout";
-import Header from "../_components/header";
+import Checkout from "../_components/Checkout";
+import Header from "../_components/Header";
 import { useShoppingCartProducts } from "@/globalState/shoppingCartStore";
 import { Product } from "../api/products/route";
 
@@ -41,7 +41,7 @@ export default function CheckoutPage() {
           <div className="border border-yellow-500 p-5"></div>
           <div className="border border-yellow-500 p-5"></div>
           <div className="border border-yellow-500 w-full flex justify-center p-5">
-            {openPaymentElement && <Checkout />}
+            {!openPaymentElement && <Checkout />}
           </div>
         </div>
         <div className="my-10 w-full border border-blue-500">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useOpenShoppingCart } from "@/globalState/shoppingCartStore";
-import ShoppingCart from "./shoppingCart";
+import ShoppingCart from "./ShoppingCart";
 
 export function ShoppingCartWrapper() {
   const openShoppingCart = useOpenShoppingCart(
