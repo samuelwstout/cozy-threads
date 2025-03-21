@@ -26,7 +26,7 @@ export default function Header({ renderShoppingCart }: HeaderProps) {
               <div className="border-b border-gray-200">
                 <div className="flex h-16 items-center justify-between">
                   <div className="hidden lg:flex lg:flex-1 lg:items-center">
-                    <a href="/" className="text-lg">
+                    <a href="/" className="text-xl">
                       <span>Cozy Threads</span>
                     </a>
                   </div>
