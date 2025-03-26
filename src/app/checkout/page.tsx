@@ -54,7 +54,7 @@ export default function CheckoutPage() {
             options={{
               loader,
               mode: "payment",
-              amount: subtotal,
+              amount: subtotal * 100,
               currency: "usd",
             }}
           >
