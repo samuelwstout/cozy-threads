@@ -3,18 +3,22 @@ import Stripe from "stripe";
 import { db } from "@/db";
 import { productsTable } from "@/db/schema";
 import { inArray } from "drizzle-orm";
+import { Product } from "../products/route";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(request: Request) {
   try {
-    const { items } = await request.json();
+    const { items, confirmationTokenId } = (await request.json()) as {
+      items: Product[];
+      confirmationTokenId: string;
+    };
 
     if (!items || !Array.isArray(items)) {
       return NextResponse.json({ error: "Invalid items" }, { status: 400 });
     }
 
-    const productIds = items.map((item: { id: number }) => item.id);
+    const productIds = items.map((item) => item.id);
     const products = await db
       .select()
       .from(productsTable)
@@ -25,22 +29,23 @@ export async function POST(request: Request) {
       0
     );
 
-    const paymentIntent = await stripe.paymentIntents.create({
+    const intent = await stripe.paymentIntents.create({
+      confirm: true,
       amount: totalAmount * 100,
       currency: "usd",
-      automatic_payment_methods: {
-        enabled: true,
+      automatic_payment_methods: { enabled: true },
+      confirmation_token: confirmationTokenId,
+      return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/complete`,
+    });
+
+    return NextResponse.json(
+      {
+        client_secret: intent.client_secret,
+        status: intent.status,
       },
-    });
-
-    return NextResponse.json({
-      clientSecret: paymentIntent.client_secret,
-      // [DEV]: For demo purposes only, you should avoid exposing the PaymentIntent ID in the client-side code.
-      dpmCheckerLink: `https://dashboard.stripe.com/settings/payment_methods/review?transaction_id=${paymentIntent.id}`,
-    });
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("error creating payment intent:", error);
-
     const message =
       error instanceof Error
         ? error.message

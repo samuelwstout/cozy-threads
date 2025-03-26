@@ -11,7 +11,6 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "../_components/Checkout";
-import { BeatLoader } from "react-spinners";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -28,31 +27,6 @@ export default function CheckoutPage() {
   const [productQuantities, setProductQuantities] = useState<
     Record<string, number>
   >({});
-  const [clientSecret, setClientSecret] = useState("");
-  const [dpmCheckerLink, setDpmCheckerLink] = useState("");
-
-  useEffect(() => {
-    if (shoppingCartProducts.length !== 0) {
-      fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: shoppingCartProducts }),
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error("Failed to create payment intent");
-          }
-          return res.json();
-        })
-        .then((data) => {
-          setClientSecret(data.clientSecret);
-          setDpmCheckerLink(data.dpmCheckerLink);
-        })
-        .catch((err) => {
-          console.error(err.message);
-        });
-    }
-  }, [shoppingCartProducts]);
 
   useEffect(() => {
     const quantities: Record<string, number> = {};
@@ -74,8 +48,16 @@ export default function CheckoutPage() {
     <div className="bg-white">
       <Header renderShoppingCart={false} />
       <div className="flex flex-col-reverse lg:flex-row items-center justify-center mx-auto max-w-2xl px-4 py-5 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
-        {clientSecret ? (
-          <Elements stripe={stripePromise} options={{ clientSecret, loader }}>
+        {subtotal && (
+          <Elements
+            stripe={stripePromise}
+            options={{
+              loader,
+              mode: "payment",
+              amount: subtotal,
+              currency: "usd",
+            }}
+          >
             <div className="flex flex-col gap-2 p-5 w-full h-screen">
               <div className="py-2">
                 <LinkAuthenticationElement />
@@ -86,15 +68,12 @@ export default function CheckoutPage() {
               </div>
               <div className="flex flex-col justify-center lg:block py-2">
                 <h3 className="pb-3 text-lg font-bold">Payment</h3>
-                <CheckoutForm dpmCheckerLink={dpmCheckerLink} />
+                <CheckoutForm />
               </div>
             </div>
           </Elements>
-        ) : (
-          <div className="w-full flex justify-center">
-            <BeatLoader size={10} />
-          </div>
         )}
+
         <div className="w-full h-auto lg:h-screen mb-8 lg:mb-0">
           <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
             <ul role="list" className="divide-y divide-gray-200">

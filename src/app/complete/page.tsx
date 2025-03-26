@@ -97,9 +97,7 @@ const STATUS_CONTENT_MAP = {
 
 function CompletePageContent() {
   const stripe = useStripe();
-
   const [status, setStatus] = useState("processing");
-  const [intentId, setIntentId] = useState<string | null>(null);
 
   const resetShoppingCart = useShoppingCartProducts(
     (state) => state.resetShoppingCart
@@ -123,7 +121,6 @@ function CompletePageContent() {
         setStatus("error");
       } else if (result.paymentIntent) {
         setStatus(result.paymentIntent.status);
-        setIntentId(result.paymentIntent.id);
       }
     });
   }, [stripe]);
@@ -149,36 +146,26 @@ function CompletePageContent() {
       <h2 id="status-text">
         {STATUS_CONTENT_MAP[status as keyof typeof STATUS_CONTENT_MAP].text}
       </h2>
-      {intentId && (
-        <div id="details-table">
-          <table>
-            <tbody>
-              <tr>
-                <td className="TableLabel">id</td>
-                <td id="intent-id" className="TableContent">
-                  {intentId}
-                </td>
-              </tr>
-              <tr>
-                <td className="TableLabel">status</td>
-                <td id="intent-status" className="TableContent">
-                  {status}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+
+      {status === "succeeded" && (
+        <div className="order-success">
+          <p>Thank you for your purchase!</p>
         </div>
       )}
-      {intentId && (
-        <a
-          href={`https://dashboard.stripe.com/payments/${intentId}`}
-          id="view-details"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          View details
-        </a>
+
+      {status === "processing" && (
+        <div className="order-processing">
+          <p>Your payment is being processed.</p>
+          <p>We&apos;ll update you once completed.</p>
+        </div>
       )}
+
+      {(status === "requires_payment_method" || status === "error") && (
+        <div className="order-failed">
+          <p>Please try again or use a different payment method.</p>
+        </div>
+      )}
+
       <a id="retry-button" href="/">
         Return to Store
       </a>
