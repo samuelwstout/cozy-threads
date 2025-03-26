@@ -36,7 +36,6 @@ export default function CheckoutForm() {
 
   const handleServerResponse = async (response: PaymentIntentResponse) => {
     if (response.error) {
-      // Show error from server on payment form
       handleError({ message: response.error } as StripeError);
       setLoading(false);
     } else if (
@@ -112,8 +111,6 @@ export default function CheckoutForm() {
       });
 
       const data = await res.json();
-
-      console.log("data: ", data);
       handleServerResponse(data);
     }
   };
