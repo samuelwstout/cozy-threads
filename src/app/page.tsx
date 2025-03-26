@@ -11,7 +11,9 @@ const baseUrl =
 
 export default async function Home() {
   try {
-    const response = await fetch(`${baseUrl}/api/products`);
+    const response = await fetch(`${baseUrl}/api/products`, {
+      next: { revalidate: 5 },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch products");
