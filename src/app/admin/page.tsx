@@ -206,7 +206,6 @@ export default function AddProduct() {
                               onChange={(e) =>
                                 setFile(e.target.files?.[0] || null)
                               }
-                              required
                             />
                           </label>
                         </div>
